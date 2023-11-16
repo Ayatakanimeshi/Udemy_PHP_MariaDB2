@@ -8,10 +8,10 @@
 <body>
 <?php
     $db = new mysqli('127.0.0.1:8889', 'root', 'root', 'mydb');
-    $records = $db->query('select * from my_items');
+    $records = $db->query('select count(*) as cnt from my_items');
     if ($records) {
         while ($record = $records->fetch_assoc()) {
-            echo $record['item_name'] . '<br>';
+            echo $record['cnt'] . '<br>';
         }
     }
 ?>    
