@@ -1,10 +1,14 @@
 <?php
 require("dbconnect.php");
-$memos = $db->query('select * from memos order by id desc'); 
-if (!$memos){
-die($db->error); }
-?>
 
+$stmt = $db->prepare('select * from memos order by id desc limit ?, 5'); 
+if (! $stmt) {
+  die($db->error);
+}
+$page = 5;
+$stmt->bind_param('i', $page);
+$stmt->execute();
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -16,11 +20,13 @@ die($db->error); }
     <h1>メモ帳</h1>
 
     <p>⇨ <a href="input.html">新しいメモ</a></p>
-    <?php while ($memo = $memos->fetch_assoc()): ?>
+
+    <?php $stmt->bind_result($id, $memo, $created); ?>
+    <?php while ($stmt->fetch()): ?>
     
     <div>
-      <h2><a href="memo.php?id=<?php echo $memo['id']; ?>"><?php echo htmlspecialchars(mb_substr($memo['memo'], 0, 50));?></a></h2>
-      <time><?php echo htmlspecialchars($memo['created']);?></time>
+      <h2><a href="memo.php?id=<?php echo $id; ?>"><?php echo htmlspecialchars(mb_substr($memo, 0, 50));?></a></h2>
+      <time><?php echo htmlspecialchars($created);?></time>
     </div>
     <hr>
     <?php endwhile;?>
