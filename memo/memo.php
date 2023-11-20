@@ -12,12 +12,20 @@
     if (! $stmt) {
         die($db->error);
     }
-    $id = 1;
+    $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    if (!$id) { // ここから追加
+        echo '表示するメモを指定してください';
+        exit();
+    } // ここまで
     $stmt->bind_param('i', $id);
     $stmt->execute();
 
     $stmt->bind_result($id, $memo, $created);
-    $stmt->fetch();
+    $result = $stmt->fetch();
+    if (!$result) {
+        echo '指定されたメモは見つかりませんでした';
+        exit();
+    }
     ?>
 
     <div><?php echo htmlspecialchars($memo); ?></div>
