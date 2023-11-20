@@ -6,6 +6,7 @@ if (! $stmt) {
   die($db->error);
 }
 $page = filter_input(INPUT_GET,'page', FILTER_SANITIZE_NUMBER_INT);
+$page = ($page ?: 1);
 $start = ($page - 1) *10;
 $stmt->bind_param('i', $page);
 $stmt->execute();
@@ -21,6 +22,10 @@ $stmt->execute();
     <h1>メモ帳</h1>
 
     <p>⇨ <a href="input.html">新しいメモ</a></p>
+
+    <?php if (!$result): ?>
+      <p>表示するメモはありません</p>
+      <?php endif; ?>
 
     <?php $stmt->bind_result($id, $memo, $created); ?>
     <?php while ($stmt->fetch()): ?>
