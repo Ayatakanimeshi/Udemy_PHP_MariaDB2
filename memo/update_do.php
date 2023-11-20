@@ -12,3 +12,6 @@ $success = $stmt->execute();
 if (!$success){
     die($db->error);
 }
+
+header('Location: memo.php?id=' . $id');
+?>
