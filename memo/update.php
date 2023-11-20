@@ -10,7 +10,7 @@ $stmt->execute();
 
 $stmt->bind_result($id, $memo, $created);
 $result = $stmt->fetch();
-if (!result) {
+if (!$result) {
   die('$db->error');
 }
 ?>
@@ -23,6 +23,7 @@ if (!result) {
   </head>
   <body>
     <form action="update.php" method="post">
+      <input type="hidden" name="id" value="<?php echo $id; ?>">
       <textarea
         name="memo"
         cols="50"
