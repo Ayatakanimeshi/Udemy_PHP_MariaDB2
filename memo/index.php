@@ -5,7 +5,8 @@ $stmt = $db->prepare('select * from memos order by id desc limit ?, 5');
 if (! $stmt) {
   die($db->error);
 }
-$page = 5;
+$page = filter_input(INPUT_GET,'page', FILTER_SANITIZE_NUMBER_INT);
+$start = ($page - 1) *10;
 $stmt->bind_param('i', $page);
 $stmt->execute();
 ?>
