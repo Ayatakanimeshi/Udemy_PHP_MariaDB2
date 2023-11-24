@@ -1,5 +1,6 @@
 <?php
 session_start();
+require('../library.php');
 
 $form = [
     'name' => '',
@@ -9,9 +10,6 @@ $form = [
 $error =[];
 
 /* htmlspecialcharsを短くする */
-function h($value) {
-    return htmlspecialchars($value, ENT_QUOTES);
-}
 
 /* フォームの内容をチェック */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
