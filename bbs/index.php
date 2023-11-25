@@ -3,11 +3,32 @@ session_start();
 require('library.php');
 
 if (isset($_SESSION['id']) && isset($_SESSION['name'])) {
+    $id = $_SESSION['id'];
     $name = $_SESSION['name'];
 } else {
     header('Location: login.php');
     exit();
 }
+
+// メッセージの投稿
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $message = filter_input(INPUT_POST,'message', FILTER_SANITIZE_STRING);
+    $db = dbconnect();
+    $stmt = $db->prepare('insert into posts (message, member_id) values(?,?)');
+    if (! $stmt) {
+        die($db->error);
+    }
+
+    $stmt->bind_param('si', $message, $id);
+    $success = $stmt->execute();
+    if (!$success) {
+        die($db->error);
+    }
+
+    header('Location: index.php');
+    exit();
+}
+
 
 $name = $_SESSION['name'];
 ?>
